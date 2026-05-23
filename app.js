@@ -1,91 +1,110 @@
-let canciones = [];
-let filtroTipoActual = 'todos';
+// app.js
+let todasLasCanciones = [];
+let filtroActual = 'todos';
 
-const listaCanciones = document.getElementById('lista-canciones');
-const searchInput = document.getElementById('search-input');
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Cargar la base de datos de canciones generada por el script de Python
+    fetch('canciones.json')
+        .then(response => {
+            if (!response.ok) throw new Error('Error al cargar la base de datos de canciones.');
+            return response.json();
+        })
+        .then(data => {
+            // Aseguramos un orden numérico ascendente basado en el himnario
+            todasLasCanciones = data.sort((a, b) => a.numero - b.numero);
+            renderizarLista(todasLasCanciones);
+        })
+        .catch(error => {
+            console.error('Error inicializando el Himnario Digital:', error);
+            document.getElementById('lista-canciones').innerHTML = `
+                <li style="padding: 20px; text-align: center; color: var(--text-muted);">
+                    Error al cargar los himnos. Asegúrate de haber ejecutado el extractor de Python.
+                </li>`;
+        });
 
-// 1. CARGAR DATOS
-async function cargarHimnario() {
-    try {
-        const respuesta = await fetch('canciones.json');
-        canciones = await respuesta.json();
-        renderizarCanciones();
-    } catch (error) {
-        console.error("Error al cargar el archivo canciones.json:", error);
-        if (listaCanciones) {
-            listaCanciones.innerHTML = `<li style="padding: 20px; color: #ef4444; text-align: center; font-size: 0.9rem;">Error al cargar el himnario. Asegúrate de servir el proyecto desde un servidor o GitHub Pages.</li>`;
-        }
+    // 2. Escuchar el buscador interactivo en tiempo real
+    document.getElementById('search-input').addEventListener('input', filtrarCanciones);
+});
+
+// Función encargada de construir y pintar la lista en el DOM
+function renderizarLista(canciones) {
+    const listaUL = document.getElementById('lista-canciones');
+    listaUL.innerHTML = '';
+
+    if (canciones.length === 0) {
+        listaUL.innerHTML = `
+            <li style="padding: 30px; text-align: center; color: var(--text-muted); font-size: 0.95rem;">
+                No se encontraron resultados para tu búsqueda.
+            </li>`;
+        return;
     }
-}
-
-// 2. RENDERIZAR INTERFAZ
-function renderizarCanciones() {
-    if (!listaCanciones) return;
-    listaCanciones.innerHTML = '';
-    
-    canciones.sort((a, b) => a.id - b.id);
-    const termino = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
     canciones.forEach(cancion => {
-        const categoriaCancion = cancion.categoria ? cancion.categoria.toLowerCase() : 'himnos';
-        
-        // Filtros superiores
-        if (filtroTipoActual !== 'todos') {
-            if (filtroTipoActual === 'himnos' && !categoriaCancion.includes('himno')) return;
-            if (filtroTipoActual === 'alabanzas' && !categoriaCancion.includes('alabanza')) return;
-        }
-
-        // Filtros del buscador
-        const coincideId = cancion.id.toString() === termino || (cancion.numero && cancion.numero.toString() === termino);
-        const coincideTitulo = cancion.titulo ? cancion.titulo.toLowerCase().includes(termino) : false;
-        const coincideLetra = cancion.letra ? cancion.letra.toLowerCase().includes(termino) : false;
-        const coincideNota = cancion.tono ? cancion.tono.toLowerCase().includes(termino) : false;
-
-        if (termino !== '' && !coincideId && !coincideTitulo && !coincideLetra && !coincideNota) {
-            return;
-        }
-
         const li = document.createElement('li');
-        li.className = `song-item type-${categoriaCancion}`;
-        
+        li.className = 'song-item';
+
+        // Reemplazar saltos de línea de la letra extraída por etiquetas <br> para HTML
+        const letraFormateada = cancion.letra.replace(/\n/g, '<br>');
+
         li.innerHTML = `
-            <div class="song-header" onclick="toggleLetra(${cancion.id})">
+            <div class="song-header" onclick="toggleLetra(this)">
                 <div class="song-info">
-                    <span class="song-number">#${cancion.numero || cancion.id}</span>
-                    <span class="song-title">${cancion.titulo || 'Sin título'}</span>
-                    <span class="badge-tag">${(cancion.categoria || 'HIMNOS').toUpperCase()}</span>
+                    <span class="song-number">${cancion.numero}</span>
+                    <span class="song-title">${cancion.titulo}</span>
+                    <span class="badge-tag">${cancion.tipo}</span>
                 </div>
-                ${cancion.tono && cancion.tono !== 'Por definir' ? `<span class="music-note">${cancion.tono}</span>` : ''}
+                <span class="music-note">${cancion.tono || '—'}</span>
             </div>
-            <div id="lyrics-${cancion.id}" class="song-lyrics-container" style="display: none;">
-                ${cancion.letra ? cancion.letra.replace(/\n/g, '<br>') : 'Letra no disponible.'}
+            <div class="song-lyrics-container">
+                ${letraFormateada}
             </div>
         `;
-        listaCanciones.appendChild(li);
+        listaUL.appendChild(li);
     });
 }
 
-// 3. LISTENERS Y EVENTOS
-if (searchInput) {
-    searchInput.addEventListener('input', renderizarCanciones);
+// Alternar visibilidad de las estrofas (Efecto Acordeón)
+function toggleLetra(elementoHeader) {
+    const contenedorLetra = elementoHeader.nextElementSibling;
+    const estaAbierto = contenedorLetra.classList.contains('open');
+
+    // Opcional: Colapsar cualquier otro himno abierto para mantener una lectura limpia
+    document.querySelectorAll('.song-lyrics-container.open').forEach(el => {
+        el.classList.remove('open');
+    });
+
+    if (!estaAbierto) {
+        contenedorLetra.classList.add('open');
+    }
 }
 
-window.filtrarPorTipo = function(tipo, e) {
-    filtroTipoActual = tipo.toLowerCase();
-    
+// Filtrado rápido por categorías (Todos / Himnos / Alabanzas)
+function filtrarPorTipo(tipo, evento) {
+    filtroActual = tipo;
+
+    // Actualizar estados visuales de los botones en la barra de filtros
     document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
-    const botonActivo = e ? e.target : window.event.target;
-    if (botonActivo) {
-        botonActivo.classList.add('active');
-    }
-    renderizarCanciones();
-};
+    evento.target.classList.add('active');
 
-window.toggleLetra = function(id) {
-    const contenedor = document.getElementById(`lyrics-${id}`);
-    if (contenedor) {
-        contenedor.style.display = contenedor.style.display === 'none' ? 'block' : 'none';
-    }
-};
+    filtrarCanciones();
+}
 
-cargarHimnario();
+// Lógica combinada: Filtro de botones + Entrada de texto del buscador
+function filtrarCanciones() {
+    const terminoBusqueda = document.getElementById('search-input').value.toLowerCase().trim();
+
+    const cancionesFiltradas = todasLasCanciones.filter(cancion => {
+        // Validación del segmento de botones
+        const coincideTipo = (filtroActual === 'todos') || (cancion.tipo === filtroActual);
+
+        // Validación del término escrito (busca por número exacto, coincidencias en título o fragmentos de letras)
+        const coincideTexto = 
+            cancion.numero.toString().includes(terminoBusqueda) ||
+            cancion.titulo.toLowerCase().includes(terminoBusqueda) ||
+            cancion.letra.toLowerCase().includes(terminoBusqueda);
+
+        return coincideTipo && coincideTexto;
+    });
+
+    renderizarLista(cancionesFiltradas);
+}

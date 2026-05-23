@@ -9,8 +9,8 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: #000000 !important;
-    color: #ffffff !important;
+    background-color: var(--bg-global) !important;
+    color: var(--text-pure) !important;
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -26,6 +26,7 @@ body {
     max-width: 600px;
     margin: 40px auto;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 /* --- CONTENIDO INTERACTIVO --- */
@@ -40,7 +41,7 @@ body {
 
 .main-header h1 { 
     margin: 0; 
-    color: #ffffff !important; /* Forzado a Blanco Puro */
+    color: var(--text-pure) !important;
     font-size: 2.8rem;
     font-weight: 700;
     letter-spacing: -1px;
@@ -48,9 +49,9 @@ body {
 
 .main-header p { 
     margin: 4px 0 0 2px; 
-    color: #a1a1aa !important; /* Forzado a Gris Claro */
+    color: var(--text-muted) !important;
     font-size: 0.8rem; 
-    text-transform: lowercase;
+    text-transform: uppercase;
     letter-spacing: 1px;
 }
 
@@ -63,7 +64,7 @@ body {
     border: 1px solid #27272a; 
     border-radius: 0px; 
     box-sizing: border-box;
-    color: #ffffff !important; /* Texto que escribe el usuario en Blanco */
+    color: var(--text-pure) !important;
     transition: all 0.2s ease;
 }
 
@@ -72,8 +73,8 @@ body {
 }
 
 .search-section input:focus { 
-    border-color: #ffffff; 
-    box-shadow: 0 0 0 1px #ffffff;
+    border-color: var(--text-pure); 
+    box-shadow: 0 0 0 1px var(--text-pure);
     outline: none; 
 }
 
@@ -95,7 +96,7 @@ body {
     cursor: pointer; 
     font-weight: 400; 
     font-size: 0.85rem;
-    color: #71717a; /* Texto inactivo en gris */
+    color: #71717a;
     transition: all 0.15s ease;
 }
 
@@ -104,14 +105,14 @@ body {
 }
 
 .btn-filter:hover {
-    background-color: #0b0b0c;
-    color: #ffffff;
+    background-color: var(--surface-card);
+    color: var(--text-pure);
 }
 
 .btn-filter.active { 
     background: transparent; 
     border: 1px solid var(--accent-purple) !important;
-    color: #ffffff !important; /* Texto activo en Blanco */
+    color: var(--text-pure) !important;
     z-index: 1;
 }
 
@@ -138,7 +139,7 @@ body {
 }
 
 .song-header:hover { 
-    background: #09090b; 
+    background: var(--surface-hover); 
 }
 
 .song-info { 
@@ -149,14 +150,14 @@ body {
 
 .song-number { 
     font-weight: 600; 
-    color: var(--accent-purple); /* Número en Morado Neón */
+    color: var(--accent-purple);
     font-size: 1rem; 
     min-width: 35px; 
 }
 
 .song-title { 
     font-weight: 400; 
-    color: #ffffff !important; /* Títulos de canciones en Blanco Puro */
+    color: var(--text-pure) !important;
     font-size: 0.95rem;
 }
 
@@ -164,24 +165,41 @@ body {
     font-size: 0.6rem; 
     padding: 2px 5px; 
     background: #18181b; 
-    color: #a1a1aa !important; /* Etiqueta en Gris Claro */
+    color: var(--text-muted) !important;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .music-note {
-    color: #a1a1aa; 
+    color: var(--text-muted); 
     font-size: 0.8rem;
     font-weight: 600;
 }
 
-/* Caja de letra oculta */
+/* Caja de letra oculta controlada dinámicamente */
 .song-lyrics-container {
-    padding: 35px 20px; 
+    display: none;
+    padding: 0px 20px; 
     background: #040405;
-    border-top: 1px solid #18181b;
     font-size: 1.15rem; 
     line-height: 1.9;
     text-align: center; 
-    color: #ffffff !important; /* Letra del himno desplegada en Blanco Puro */
+    color: var(--text-pure) !important;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, padding 0.2s ease-in-out;
+}
+
+/* Estado activo cuando es desplegado por JavaScript */
+.song-lyrics-container.open {
+    display: block;
+    padding: 35px 20px;
+    border-top: 1px solid #18181b;
+    opacity: 1;
+}
+
+/* Manejo semántico de espaciado entre estrofas */
+.song-lyrics-container br + br {
+    display: block;
+    content: "";
+    margin-top: 16px;
 }
