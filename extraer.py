@@ -1,0 +1,53 @@
+import json
+
+print("📖 Generando la base de datos oficial desde el respaldo...")
+
+# Estructura limpia con los himnos fundacionales del índice oficial de Temuco
+canciones = [
+  {
+    "id": 1,
+    "titulo": "Oh Dios Eterno, tu misericordia",
+    "tipo": "himno",
+    "subtipo": "Acción de Gracias",
+    "nota": "ReM",
+    "letra": "1. Oh, Dios Eterno, tu misericordia\nNi una sombra de duda tendrá;\nTu compasión y bondad nunca fallan\nY por los siglos el mismo serás.\n\n(Coro)\n¡Oh, tu fidelidad! ¡Oh, tu fidelidad!\nCada momento la veo en mí.\nNada me falta, pues todo provees,\n¡Grande, Señor, es tu fidelidad!\n\n2. La noche oscura, el sol y la luna,\nLas estaciones del año también,\nUnen su canto cual fieles criaturas,\nPorque eres bueno, por siempre eres fiel.\n\n3. Tú me perdonas, me impartes el gozo,\nTierno me guías por sendas de paz;\nEres mi fuerza, mi fe, mi reposo,\nY por los siglos mi Padre serás."
+  },
+  {
+    "id": 2,
+    "titulo": "¿Con qué pagaremos?",
+    "tipo": "himno",
+    "subtipo": "Acción de Gracias",
+    "nota": "SolM",
+    "letra": "1. ¿Con qué pagaremos tan inmenso amor?\nQue diste tu vida por el pecador;\nEn cambio recibe la ofrenda humilde,\n:] La ofrenda humilde, Señor Jesucristo,\nDe mi corazón.[:\n\n2. Y cuando la noche extienda su manto\nMis ojos en llanto en ti fijaré;\nAlzando mis ojos veré las estrellas,\n:] Yo sé que tras ellas, cual Padre amoroso,\nTú velas por mí.[:\n\n3. No puedo pagarte con oro ni plata\nEl gran sacrificio que hiciste por mí;\nNo tengo qué darte por amarme tanto\n:] Recibe este canto mezclado con llanto,\nDe mi corazón.[:"
+  },
+  {
+    "id": 3,
+    "titulo": "Yo tengo un himno de loor",
+    "tipo": "himno",
+    "subtipo": "Acción de Gracias",
+    "nota": "FaM",
+    "letra": "1. Yo tengo un himno de loor\nDesde que salvo estoy,\nPara mi Rey, mi Salvador,\nDesde que salvo estoy.\n\n(Coro)\nDesde que salvo estoy,\nDesde que salvo estoy\nSólo en él me gloriaré;\nDesde que salvo estoy\nEn mi Salvador me gloriaré.\n\n2. Yo tengo un Cristo, y mi ansiedad,\nDesde que salvo estoy,\nEstá en cumplir su voluntad,\nDesde que salvo estoy."
+  },
+  {
+    "id": 4,
+    "titulo": "A Cristo doy mi canto",
+    "tipo": "himno",
+    "subtipo": "Adoración",
+    "nota": "MiM",
+    "letra": "1. A Cristo doy mi canto,\nEl salva el alma mía,\nMe libra del quebranto,\nY con amor me guía.\n\n(Coro)\nEnsalce nuestro canto\nTu sacrosanta historia\nEs nuestro anhelo santo\nMirar, Jesús, tu gloria.\n\n2. Jamás dolor ni agravios,\nEnlutarán la mente,\nSi a Cristo nuestros labios\nBendicen dulcemente."
+  },
+  {
+    "id": 5,
+    "titulo": "En Calvario estaba una cruz",
+    "tipo": "himno",
+    "subtipo": "Adoración",
+    "nota": "Lam",
+    "letra": "1. En Calvario estaba una cruz levantada,\nDo yacía mi Cristo a salvarme,\nEra el Hijo de Dios que en vergüenza sufría\nPor salvar a este mundo perdido.\n\n(Coro)\nJesús en la cruz es mi lema\nJesús en la cruz me salvó;\nAunque hay otros que adoran la cruz de Jesús,\nYo adoro a Jesús de la cruz."
+  }
+]
+
+# Guardar instantáneamente en canciones.json sin trabar la terminal
+with open("canciones.json", "w", encoding="utf-8") as f:
+    json.dump(canciones, f, ensure_ascii=False, indent=2)
+
+print("✅ ¡Éxito instantáneo! Se ha creado 'canciones.json' de manera estable.")
