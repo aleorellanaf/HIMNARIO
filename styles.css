@@ -1,10 +1,10 @@
 :root {
-    --bg-global: #000000;       /* Negro absoluto */
-    --surface-card: #0b0b0c;    /* Gris mínimo para bloques oscuros */
-    --surface-hover: #141417;   /* Hover sutil para las canciones */
-    --text-pure: #ffffff;       /* Blanco puro */
-    --text-muted: #a1a1aa;      /* Gris claro para subtítulos y descripciones */
-    --accent-purple: #9d4edf;   /* Morado neón de tu diseño */
+    --bg-global: #000000;       
+    --surface-card: #0b0b0c;    
+    --surface-hover: #141417;   
+    --text-pure: #ffffff;       
+    --text-muted: #a1a1aa;      
+    --accent-purple: #9d4edf;   
 }
 
 body {
@@ -20,16 +20,14 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* CONTENEDOR PRINCIPAL: Centrado y en una sola columna limpia */
 .container {
     width: 100%;
     max-width: 600px;
-    margin: 40px auto;
+    margin: 20px auto;
     padding: 20px;
     box-sizing: border-box;
 }
 
-/* --- CONTENIDO INTERACTIVO --- */
 .left-column {
     display: flex;
     flex-direction: column;
@@ -42,7 +40,7 @@ body {
 .main-header h1 { 
     margin: 0; 
     color: var(--text-pure) !important;
-    font-size: 2.8rem;
+    font-size: 2.6rem;
     font-weight: 700;
     letter-spacing: -1px;
 }
@@ -55,151 +53,66 @@ body {
     letter-spacing: 1px;
 }
 
-/* Input de búsqueda rectangular */
 .search-section input {
     width: 100%; 
     padding: 15px 16px; 
-    font-size: 0.95rem;
+    font-size: 16px; /* Evita que el navegador del cel fuerce zoom automático */
     background-color: transparent;
     border: 1px solid #27272a; 
     border-radius: 0px; 
     box-sizing: border-box;
     color: var(--text-pure) !important;
-    transition: all 0.2s ease;
 }
 
-.search-section input::placeholder {
-    color: #52525b;
-}
+.search-section input::placeholder { color: #52525b; }
+.search-section input:focus { border-color: var(--text-pure); outline: none; }
 
-.search-section input:focus { 
-    border-color: var(--text-pure); 
-    box-shadow: 0 0 0 1px var(--text-pure);
-    outline: none; 
-}
-
-/* Botones de filtro rectangulares fusionados */
-.filter-buttons { 
-    display: flex; 
-    gap: 0px; 
-    margin: 25px 0; 
-    border: 1px solid #27272a;
-}
+.filter-buttons { display: flex; margin: 20px 0; border: 1px solid #27272a; }
 
 .btn-filter {
-    flex: 1; 
-    padding: 14px; 
-    border: none;
-    border-right: 1px solid #27272a;
-    background: transparent;
-    border-radius: 0px; 
-    cursor: pointer; 
-    font-weight: 400; 
-    font-size: 0.85rem;
-    color: #71717a;
-    transition: all 0.15s ease;
+    flex: 1; padding: 14px; border: none; border-right: 1px solid #27272a;
+    background: transparent; color: #71717a; cursor: pointer; font-size: 0.85rem;
 }
+.btn-filter:last-child { border-right: none; }
+.btn-filter:hover { background-color: var(--surface-card); color: var(--text-pure); }
+.btn-filter.active { border: 1px solid var(--accent-purple) !important; color: var(--text-pure) !important; }
 
-.btn-filter:last-child {
-    border-right: none;
-}
-
-.btn-filter:hover {
-    background-color: var(--surface-card);
-    color: var(--text-pure);
-}
-
-.btn-filter.active { 
-    background: transparent; 
-    border: 1px solid var(--accent-purple) !important;
-    color: var(--text-pure) !important;
-    z-index: 1;
-}
-
-/* --- PLAYLIST MINIMALISTA --- */
-.song-list { 
-    list-style: none; 
-    padding: 0; 
-    margin: 0; 
-}
-
-.song-item {
-    background: transparent; 
-    border-bottom: 1px solid #18181b;
-    overflow: hidden;
-}
+.song-list { list-style: none; padding: 0; margin: 0; }
+.song-item { border-bottom: 1px solid #18181b; overflow: hidden; }
 
 .song-header {
-    padding: 16px 8px; 
-    display: flex; 
-    justify-content: space-between;
-    align-items: center; 
-    cursor: pointer;
-    transition: background 0.15s;
+    padding: 16px 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+    user-select: none; -webkit-user-select: none;
 }
+.song-header:hover { background: var(--surface-hover); }
+.song-info { display: flex; align-items: center; gap: 16px; }
+.song-number { font-weight: 600; color: var(--accent-purple); min-width: 35px; }
+.song-title { font-weight: 400; color: var(--text-pure) !important; }
+.badge-tag { font-size: 0.6rem; padding: 2px 5px; background: #18181b; color: var(--text-muted) !important; text-transform: uppercase; }
+.music-note { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; }
 
-.song-header:hover { 
-    background: var(--surface-hover); 
-}
-
-.song-info { 
-    display: flex; 
-    align-items: center; 
-    gap: 16px; 
-}
-
-.song-number { 
-    font-weight: 600; 
-    color: var(--accent-purple);
-    font-size: 1rem; 
-    min-width: 35px; 
-}
-
-.song-title { 
-    font-weight: 400; 
-    color: var(--text-pure) !important;
-    font-size: 0.95rem;
-}
-
-.badge-tag {
-    font-size: 0.6rem; 
-    padding: 2px 5px; 
-    background: #18181b; 
-    color: var(--text-muted) !important;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.music-note {
-    color: var(--text-muted); 
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-/* Caja de letra oculta controlada dinámicamente */
+/* ==========================================================================
+   CAJA DE LETRA: Centrado AMOLED pre-line definitivo
+   ========================================================================== */
 .song-lyrics-container {
     display: none;
-    padding: 0px 20px; 
-    background: #040405;
-    font-size: 1.15rem; 
+    width: 100%;
+    margin: 0 auto !important;
+    padding: 0px 20px;
+    box-sizing: border-box;
+    background-color: #040405;
+    font-size: 1.2rem; 
     line-height: 1.9;
-    text-align: center; 
+    text-align: center !important;
     color: var(--text-pure) !important;
+    white-space: pre-line !important; 
     opacity: 0;
-    transition: opacity 0.2s ease-in-out, padding 0.2s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
 }
 
-/* Estado activo cuando es desplegado por JavaScript */
 .song-lyrics-container.open {
-    display: block;
-    padding: 35px 20px;
+    display: block !important;
+    padding: 35px 20px !important;
     border-top: 1px solid #18181b;
     opacity: 1;
-}
-
-/* Manejo semántico de espaciado entre estrofas */
-.song-lyrics-container br + br {
-    display: block;
-    content: "";
-    margin-top: 16px;
 }

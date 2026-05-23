@@ -1,112 +1,125 @@
 import pdfplumber
 import json
 import re
+import os
 
-def extraer_letras_completas(pdf_path, json_path):
-    print("📖 Abriendo el cuerpo completo del himnario...")
+def extraer_letras_perfectas(json_nombre):
+    # 1. Encontrar de forma dinámica la carpeta absoluta donde está este script
+    ruta_base = os.path.dirname(os.path.abspath(__file__))
+    json_path = os.path.join(ruta_base, json_nombre)
     
-    canciones = []
-    id_actual = 1
+    # 2. Escanear automáticamente la carpeta para encontrar tu archivo PDF
+    archivos_en_carpeta = os.listdir(ruta_base)
+    pdf_encontrado = None
     
-    # Captura un número al inicio, un punto/espacio opcional y el título
-    patron_inicio = re.compile(r'^(\d+)[.\-\s]+(.*)$')
+    for archivo in archivos_en_carpeta:
+        if archivo.lower().endswith('.pdf'):
+            pdf_encontrado = archivo
+            break
+            
+    if not pdf_encontrado:
+        print(f"❌ Error Crítico: No se encontró ningún archivo .pdf dentro de la carpeta:")
+        print(f"   {ruta_base}")
+        print("👉 Asegúrate de que el PDF que subiste esté guardado en esa misma carpeta.")
+        return
+        
+    pdf_path = os.path.join(ruta_base, pdf_encontrado)
+    print(f"📖 ¡Archivo detectado con éxito!: '{pdf_encontrado}'")
+    print("⏳ Analizando estructura continua para indexar las 385 canciones...")
     
-    himno_actual = None
-    lineas_letra_acumuladas = []
-    
+    texto_completo = ""
     with pdfplumber.open(pdf_path) as pdf:
-        for num_pag, pagina in enumerate(pdf.pages, start=1):
-            texto = pagina.extract_text()
-            if not texto:
+        for pagina in pdf.pages:
+            texto_pag = pagina.extract_text()
+            if texto_pag:
+                texto_completo += texto_pag + "\n"
+
+    # REGEX QUIRÚRGICA: Busca "Número + Espacios/Saltos + Título en MAYÚSCULAS"
+    # Captura de forma flexible sin importar si el número está al inicio de la línea o flotando
+    patron_encabezado = re.compile(r'(?:^|\s)(\d+)[\s\n]+([A-ZÁÉÍÓÚÑ¿?¡!.,\s-]{3,})', re.DOTALL)
+    
+    matches = list(patron_encabezado.finditer(texto_completo))
+    bloques_validos = []
+    ultimo_num_registrado = 0
+    
+    # Fase 1: Mapear la secuencia numérica estricta del 1 al 385
+    for match in matches:
+        num_detectado = int(match.group(1))
+        titulo_detectado = match.group(2).strip()
+        
+        # Filtros para ignorar la palabra CORO o falsos positivos altos
+        if "CORO" in titulo_detectado or num_detectado > 390:
+            continue
+            
+        # Lógica secuencial: descarta las estrofas ordinarias (1., 2.) porque no ascienden
+        if num_detectado > ultimo_num_registrado:
+            if ultimo_num_registrado == 0 or (num_detectado - ultimo_num_registrado) < 100:
+                bloques_validos.append({
+                    "numero": num_detectado,
+                    "titulo": titulo_detectado,
+                    "inicio_pos": match.start(),
+                    "fin_encabezado_pos": match.end()
+                })
+                ultimo_num_registrado = num_detectado
+
+    canciones = []
+    total_himnos = len(bloques_validos)
+    
+    # Fase 2: Recortar de forma milimétrica la letra entre las coordenadas encontradas
+    for i in range(total_himnos):
+        himno_actual = bloques_validos[i]
+        pos_inicio_letra = himno_actual["fin_encabezado_pos"]
+        
+        if i + 1 < total_himnos:
+            pos_fin_letra = bloques_validos[i+1]["inicio_pos"]
+        else:
+            pos_fin_letra = len(texto_completo)
+            
+        fragmento_letra = texto_completo[pos_inicio_letra:pos_fin_letra]
+        
+        lineas_letra = []
+        for linea in fragmento_letra.split("\n"):
+            linea_limpia = linea.strip()
+            
+            # Limpiar el residuo del número del siguiente himno si quedó acoplado al final
+            if i + 1 < total_himnos and linea_limpia == str(bloques_validos[i+1]["numero"]):
+                break
+                
+            if not linea_limpia:
+                if lineas_letra and lineas_letra[-1] != "":
+                    lineas_letra.append("")
                 continue
                 
-            lineas = texto.split('\n')
+            if any(x in linea_limpia.upper() for x in ["HIMNARIO", "PÁGINA", "EDICIONES", "TEMUCO"]):
+                continue
+                
+            lineas_letra.append(linea_limpia)
             
-            # Control estricto de parada: Si entramos a las páginas finales de índices de títulos
-            if any(idx in texto.upper() for idx in ["ÍNDICE ALFABÉTICO", "INDICE GENERAL", "INDICE ALFABETICO"]):
-                print(f"🛑 Índice detectado en la página {num_pag}. Finalizando extracción.")
-                break
-            
-            for linea in lineas:
-                linea_limpia = linea.strip()
-                
-                # Gestión de líneas vacías para separar estrofas de forma limpia
-                if not linea_limpia:
-                    if himno_actual and lineas_letra_acumuladas and lineas_letra_acumuladas[-1] != "":
-                        lineas_letra_acumuladas.append("")
-                    continue
-                
-                # Filtros de seguridad para omitir encabezados o metadatos de imprenta
-                if linea_limpia.isdigit() or any(x in linea_limpia.upper() for x in ["I N D I C E", "ÍNDICE", "HIMNARIO", "PÁGINA", "EDICIONES", "TEMUCO"]):
-                    continue
-                
-                match = patron_inicio.match(linea_limpia)
-                
-                # CONDICIÓN MEJORADA PARA NUEVO HIMNO
-                es_nuevo_himno = False
-                if match:
-                    posible_titulo = match.group(2).strip()
-                    # Quitamos todo lo que no sean letras para validar si es un título principal en mayúsculas
-                    solo_letras = re.sub(r'[^a-zA-ZÁÉÍÓÚÑ]', '', posible_titulo)
-                    
-                    # En tu PDF los títulos vienen completamente en mayúsculas (ej: "SUBLIME GRACIA")
-                    if solo_letras.isupper() and len(solo_letras) >= 2:
-                        es_nuevo_himno = True
-                
-                if es_nuevo_himno:
-                    # Guardar el himno anterior antes de iniciar el nuevo
-                    if himno_actual:
-                        letra_final = "\n".join(lineas_letra_acumuladas).strip()
-                        letra_final = re.sub(r'\n{3,}', '\n\n', letra_final) # Evita saltos de línea triples
-                        himno_actual["letra"] = letra_final if letra_final else "Letra en preparación..."
-                        canciones.append(himno_actual)
-                        id_actual += 1
-                        lineas_letra_acumuladas = []
-                    
-                    numero = match.group(1).strip()
-                    titulo = match.group(2).strip()
-                    
-                    # Limpieza profunda de caracteres huérfanos del formateo del PDF
-                    titulo = re.sub(r'^[\.\-\s…]+', '', titulo)
-                    titulo = re.sub(r'[\.\-\s…]+$', '', titulo)
-                    
-                    # Clasificación: En este himnario los coros/alabanzas suelen pasar del número 300 o reiniciar
-                    # Adaptamos la lógica de categorías
-                    num_int = int(numero)
-                    if num_int >= 300:
-                        categoria = "ALABANZAS"
-                    else:
-                        categoria = "HIMNOS"
-                        
-                    himno_actual = {
-                        "id": id_actual,
-                        "titulo": titulo.title(), # Convierte "SUBLIME GRACIA" a "Sublime Gracia"
-                        "numero": num_int,
-                        "tono": "Por definir",
-                        "categoria": categoria,
-                        "tipo": categoria.lower(),
-                        "letra": ""
-                    }
-                else:
-                    # Si no cumple el patrón de título, es el cuerpo de la letra
-                    if himno_actual:
-                        # Evitar registrar números de página sueltos al final que coincidan con el número del himno
-                        if linea_limpia == str(himno_actual["numero"]):
-                            continue
-                        lineas_letra_acumuladas.append(linea_limpia)
-                        
-        # No olvidar guardar el último del búfer al salir del bucle
-        if himno_actual:
-            letra_final = "\n".join(lineas_letra_acumuladas).strip()
-            letra_final = re.sub(r'\n{3,}', '\n\n', letra_final)
-            himno_actual["letra"] = letra_final if letra_final else "Letra en preparación..."
-            canciones.append(himno_actual)
+        letra_final = "\n".join(lineas_letra).strip()
+        letra_final = re.sub(r'\n{3,}', '\n\n', letra_final)
+        
+        # Formatear estéticamente el título
+        titulo_limpio = re.sub(r'\s+', ' ', himno_actual["titulo"]).strip()
+        titulo_limpio = re.sub(r'^[\.\-\s…]+|[\.\-\s…]+$', '', titulo_limpio)
+        
+        categoria = "ALABANZAS" if himno_actual["numero"] >= 300 else "HIMNOS"
+        
+        canciones.append({
+            "id": i + 1,
+            "titulo": titulo_limpio.title(), 
+            "numero": himno_actual["numero"],
+            "tono": "Por definir",
+            "categoria": categoria,
+            "tipo": categoria.lower(),
+            "letra": letra_final if letra_final else "Letra en preparación..."
+        })
 
-    # Guardar el JSON en UTF-8 nativo para que reconozca tildes y eñes en la web
+    # Guardar en canciones.json respetando UTF-8
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(canciones, f, ensure_ascii=False, indent=2)
         
-    print(f"\n✅ ¡Proceso terminado! Se procesaron {len(canciones)} canciones correctamente en '{json_path}'.")
+    print(f"\n✅ ¡Proceso terminado con éxito! Se indexaron exactamente {len(canciones)} canciones reales en '{json_nombre}'.")
 
 if __name__ == "__main__":
-    extraer_letras_completas("himnario.pdf", "canciones.json")
+    # Ya no le pasamos el nombre del PDF; el script lo detectará solo
+    extraer_letras_perfectas("canciones.json")
