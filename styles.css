@@ -1,57 +1,196 @@
+/* ==========================================================================
+   HIMNARIO DIGITAL - ESTILO DARK BRUTALISTA / MODERNO (Inspiración Mixeria)
+   ========================================================================== */
+
+:root {
+    --bg-global: #0b0b0c;       /* Negro profundo mate de fondo */
+    --surface-card: #121214;    /* Gris oscuro para contenedores sutiles */
+    --surface-hover: #1a1a1e;   /* Gris un poco más claro para hovers */
+    --text-pure: #ffffff;       /* Blanco puro para títulos y lecturas principales */
+    --text-muted: #62626a;     /* Gris apagado para subtítulos y números secundarios */
+    
+    /* Colores de acento tomados de la interfaz de referencia */
+    --accent-purple: #9d4edf;   /* Morado neón/eléctrico para el marco y focos */
+    --accent-green: #38a169;    /* Verde para Alabanzas */
+    --accent-blue: #3182ce;     /* Azul para Himnos */
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: #f0f2f5;
-    margin: 0; padding: 10px;
+    background-color: var(--bg-global);
+    color: var(--text-pure);
+    margin: 0; 
+    padding: 20px 10px;
+    -webkit-font-smoothing: antialiased;
 }
+
 .container {
-    max-width: 600px; margin: 0 auto;
-    background: white; padding: 20px; border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    max-width: 600px; 
+    margin: 0 auto;
+    background: #000000; /* Fondo negro absoluto para el centro */
+    padding: 30px 25px; 
+    border-radius: 16px;
+    border: 1px solid #1a1a1e; /* Borde ultra fino oscuro */
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
 }
-.main-header h1 { margin: 0; color: #1a202c; font-size: 1.8rem; }
-.main-header p { margin: 5px 0 20px 0; color: #718096; font-size: 0.9rem; }
 
+/* --- CABECERA DE ALTO IMPACTO --- */
+.main-header {
+    margin-bottom: 25px;
+}
+
+.main-header h1 { 
+    margin: 0; 
+    color: var(--text-pure); 
+    font-size: 2.1rem; 
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.main-header p { 
+    margin: 6px 0 0 0; 
+    color: var(--text-muted); 
+    font-size: 0.85rem; 
+    text-transform: lowercase; /* Fiel al estilo "música mixeria" */
+    letter-spacing: 0.5px;
+}
+
+/* --- INPUT DE BÚSQUEDA INDUSTRIAL --- */
 .search-section input {
-    width: 100%; padding: 14px; font-size: 1rem;
-    border: 2px solid #e2e8f0; border-radius: 8px; box-sizing: border-box;
-    transition: border-color 0.2s;
+    width: 100%; 
+    padding: 15px 18px; 
+    font-size: 1rem;
+    background-color: var(--surface-card);
+    border: 1px solid #1e1e22; 
+    border-radius: 10px; 
+    box-sizing: border-box;
+    color: var(--text-pure);
+    transition: all 0.2s ease;
 }
-.search-section input:focus { border-color: #3182ce; outline: none; }
 
-.filter-buttons { display: flex; gap: 10px; margin: 15px 0; }
+.search-section input::placeholder {
+    color: #4c4c54;
+}
+
+.search-section input:focus { 
+    border-color: var(--accent-purple); /* Brillo morado al enfocar */
+    background-color: #000000;
+    box-shadow: 0 0 0 4px rgba(157, 78, 223, 0.15);
+    outline: none; 
+}
+
+/* --- BOTONES DE FILTRO MINIMALISTAS --- */
+.filter-buttons { 
+    display: flex; 
+    gap: 8px; 
+    margin: 20px 0; 
+}
+
 .btn-filter {
-    flex: 1; padding: 10px; border: none; background: #edf2f7;
-    border-radius: 6px; cursor: pointer; font-weight: bold; color: #4a5568;
+    flex: 1; 
+    padding: 11px; 
+    border: 1px solid #1e1e22; 
+    background: var(--surface-card);
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-weight: 600; 
+    font-size: 0.85rem;
+    color: #a0a0a9;
+    transition: all 0.2s ease;
 }
-.btn-filter.active { background: #3182ce; color: white; }
 
-.song-list { list-style: none; padding: 0; margin: 0; }
+.btn-filter:hover {
+    background-color: var(--surface-hover);
+    color: var(--text-pure);
+}
+
+.btn-filter.active { 
+    background: transparent; 
+    border: 2px solid var(--accent-purple); /* Enmarcado morado como en tu captura */
+    color: var(--text-pure); 
+}
+
+/* --- LISTADO DE HIMNOS ESTILO PLAYLIST --- */
+.song-list { 
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+}
+
 .song-item {
-    background: #fff; border: 1px solid #e2e8f0; border-radius: 8px;
-    margin-bottom: 10px; overflow: hidden;
+    background: var(--surface-card); 
+    border: 1px solid #1a1a1e;
+    border-radius: 10px;
+    margin-bottom: 8px; 
+    overflow: hidden;
+    transition: transform 0.15s ease, background 0.15s ease;
 }
+
+.song-item:hover {
+    background: var(--surface-hover);
+    transform: translateY(-1px); /* Efecto sutil de flotado */
+}
+
 .song-header {
-    padding: 15px; display: flex; justify-content: space-between;
-    align-items: center; cursor: pointer; background: #ffffff;
+    padding: 16px 18px; 
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
+    cursor: pointer;
 }
-.song-header:hover { background: #f7fafc; }
-.song-info { display: flex; align-items: center; gap: 10px; }
-.song-number { font-weight: bold; color: #3182ce; font-size: 1.1rem; min-width: 40px; }
-.song-title { font-weight: 500; color: #2d3748; }
 
+.song-info { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+}
+
+.song-number { 
+    font-weight: 700; 
+    color: var(--accent-purple); /* El número toma el protagonismo neón */
+    font-size: 1.1rem; 
+    min-width: 40px; 
+}
+
+.song-title { 
+    font-weight: 500; 
+    color: #e4e4e7; 
+    font-size: 1rem;
+}
+
+/* Etiquetas sutiles oscuras */
 .badge-tag {
-    font-size: 0.7rem; padding: 3px 6px; border-radius: 4px;
-    background: #e2e8f0; color: #4a5568; text-transform: uppercase;
+    font-size: 0.65rem; 
+    padding: 3px 6px; 
+    border-radius: 4px;
+    background: #1f1f23; 
+    color: #a0a0a9; 
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
-.type-himno { border-left: 5px solid #3182ce; }
-.type-alabanza { border-left: 5px solid #38a169; }
 
+/* Bordes laterales sutiles según categoría si se desea revivir */
+.type-himnos { border-left: 4px solid var(--accent-blue); }
+.type-alabanzas { border-left: 4px solid var(--accent-green); }
+
+/* Notas musicales sólidas */
 .music-note {
-    background: #feebc8; color: #c05621; font-size: 0.8rem;
-    padding: 4px 8px; border-radius: 4px; font-weight: bold;
+    background: #271c3a; 
+    color: #c084fc; 
+    font-size: 0.75rem;
+    padding: 4px 8px; 
+    border-radius: 5px; 
+    font-weight: bold;
 }
+
+/* --- CAJA DE LETRA ESTILO REPRODUCTOR --- */
 .song-lyrics-container {
-    padding: 20px; background: #fafafa; border-top: 1px solid #edf2f7;
-    font-family: 'Georgia', serif; font-size: 1.15rem; line-height: 1.7;
-    text-align: center; color: #1a202c;
+    padding: 25px 20px; 
+    background: #09090b; /* Fondo aún más oscuro para concentrar la vista */
+    border-top: 1px solid #1a1a1e;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; /* Consistencia moderna */
+    font-size: 1.15rem; 
+    line-height: 1.8;
+    text-align: center; 
+    color: #f4f4f5;
 }

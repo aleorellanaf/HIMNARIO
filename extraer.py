@@ -21,36 +21,35 @@ def procesar_indice_himnario(pdf_path, json_path):
     for linea in lineas:
         linea = linea.strip()
         
-        # RegEx para capturar: "TITULO DE LA CANCIÓN 123" (Letras y caracteres, espacio, número al final)
+        # RegEx para capturar: "TITULO DE LA CANCIÓN 123"
         match = re.search(r'^(.+?)\s+(\d+)$', linea)
         
         if match:
             titulo = match.group(1).strip()
             numero = match.group(2).strip()
             
-            # Limpieza de puntos o caracteres raros al final del título (ej: "CANTAD, OH PEREGRINOS. 110")
+            # Limpieza de puntos o caracteres raros al final del título
             titulo = re.sub(r'[\.\s…\-]+$', '', titulo)
             
             # Evitamos procesar líneas del índice que no sean canciones reales
             if titulo in ["I N D I C E", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "Y"]:
                 continue
                 
-            # Identificar si pertenece a la sección de "CÁNTICOS" o "HIMNOS" según el rango de número
-            # Los cánticos suelen ser una lista secundaria (1 al 100) que viene después en los índices
-            if int(numero) <= 100 and "CÁNTICOS" in texto_completo:
-                # Una lógica simple: si el número es bajo y ya procesamos números altos, podría ser Cántico
-                # Para asegurar, dejamos por defecto la categoría "Himnos" y "Alabanzas" balanceada
-                categoria = "Alabanzas" if int(numero) % 2 == 0 else "Himnos"
+            # Determinamos la categoría con texto estricto en mayúsculas
+            # Si el número es menor o igual a 100 (Cánticos), va a Alabanzas, el resto a Himnos
+            if int(numero) <= 100:
+                categoria = "ALABANZAS"
             else:
-                categoria = "Himnos"
+                categoria = "HIMNOS"
 
-            # Creamos la estructura JSON que tu app.js necesita para renderizar en Safari
+            # Creamos la estructura JSON limpia que espera el frontend
             canciones.append({
                 "id": id_actual,
-                "titulo": titulo.capitalize(), # Deja solo la primera letra en mayúscula para que se vea ordenado
+                "titulo": titulo.capitalize(),
                 "numero": numero,
                 "tono": "Por definir",
                 "categoria": categoria,
+                "tipo": categoria.lower(),  # Para compatibilidad con clases CSS antiguas
                 "letra": "Letra de la canción en preparación...\n\nPronto estará disponible."
             })
             id_actual += 1
