@@ -1,0 +1,57 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0; padding: 10px;
+}
+.container {
+    max-width: 600px; margin: 0 auto;
+    background: white; padding: 20px; border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.main-header h1 { margin: 0; color: #1a202c; font-size: 1.8rem; }
+.main-header p { margin: 5px 0 20px 0; color: #718096; font-size: 0.9rem; }
+
+.search-section input {
+    width: 100%; padding: 14px; font-size: 1rem;
+    border: 2px solid #e2e8f0; border-radius: 8px; box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+.search-section input:focus { border-color: #3182ce; outline: none; }
+
+.filter-buttons { display: flex; gap: 10px; margin: 15px 0; }
+.btn-filter {
+    flex: 1; padding: 10px; border: none; background: #edf2f7;
+    border-radius: 6px; cursor: pointer; font-weight: bold; color: #4a5568;
+}
+.btn-filter.active { background: #3182ce; color: white; }
+
+.song-list { list-style: none; padding: 0; margin: 0; }
+.song-item {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 8px;
+    margin-bottom: 10px; overflow: hidden;
+}
+.song-header {
+    padding: 15px; display: flex; justify-content: space-between;
+    align-items: center; cursor: pointer; background: #ffffff;
+}
+.song-header:hover { background: #f7fafc; }
+.song-info { display: flex; align-items: center; gap: 10px; }
+.song-number { font-weight: bold; color: #3182ce; font-size: 1.1rem; min-width: 40px; }
+.song-title { font-weight: 500; color: #2d3748; }
+
+.badge-tag {
+    font-size: 0.7rem; padding: 3px 6px; border-radius: 4px;
+    background: #e2e8f0; color: #4a5568; text-transform: uppercase;
+}
+.type-himno { border-left: 5px solid #3182ce; }
+.type-alabanza { border-left: 5px solid #38a169; }
+
+.music-note {
+    background: #feebc8; color: #c05621; font-size: 0.8rem;
+    padding: 4px 8px; border-radius: 4px; font-weight: bold;
+}
+.song-lyrics-container {
+    padding: 20px; background: #fafafa; border-top: 1px solid #edf2f7;
+    font-family: 'Georgia', serif; font-size: 1.15rem; line-height: 1.7;
+    text-align: center; color: #1a202c;
+}
