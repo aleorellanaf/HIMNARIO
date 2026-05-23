@@ -8,26 +8,29 @@
 </head>
 <body>
 
-    <main class="container">
-        <header class="main-header">
-            <h1>📖 Himnario Digital</h1>
-            <p>Índice oficial corporativo</p>
-        </header>
+    <div class="container">
+        
+        <div class="left-column">
+            <header class="main-header">
+                <h1>Himnario Digital</h1>
+                <p>IDS LANIN</p>
+            </header>
 
-        <section class="search-section">
-            <input type="text" id="search-input" placeholder="🔍 Busca por número, título o letra...">
-        </section>
+            <section class="search-section">
+                <input type="text" id="search-input" placeholder="busca por número, título o letra...">
+            </section>
 
-        <div class="filter-buttons">
-            <button class="btn-filter active" onclick="filtrarPorTipo('todos', event)">📚 Todos</button>
-            <button class="btn-filter" onclick="filtrarPorTipo('himno', event)">⛪ Himnos</button>
-            <button class="btn-filter" onclick="filtrarPorTipo('alabanza', event)">🎸 Alabanzas</button>
+            <div class="filter-buttons">
+                <button class="btn-filter active" onclick="filtrarPorTipo('todos', event)">Todos</button>
+                <button class="btn-filter" onclick="filtrarPorTipo('himnos', event)">Himnos</button>
+                <button class="btn-filter" onclick="filtrarPorTipo('alabanzas', event)">Alabanzas</button>
+            </div>
+
+            <ul id="lista-canciones" class="song-list">
+                </ul>
         </div>
 
-        <section class="lists-section">
-            <ul id="lista-canciones" class="song-list"></ul>
-        </section>
-    </main>
+    </div>
 
     <script src="app.js"></script>
 </body>

@@ -1,116 +1,99 @@
-/* ==========================================================================
-   HIMNARIO DIGITAL - ESTILO DARK BRUTALISTA / MODERNO (Inspiración Mixeria)
-   ========================================================================== */
-
-:root {
-    --bg-global: #0b0b0c;       /* Negro profundo mate de fondo */
-    --surface-card: #121214;    /* Gris oscuro para contenedores sutiles */
-    --surface-hover: #1a1a1e;   /* Gris un poco más claro para hovers */
-    --text-pure: #ffffff;       /* Blanco puro para títulos y lecturas principales */
-    --text-muted: #62626a;     /* Gris apagado para subtítulos y números secundarios */
-    
-    /* Colores de acento tomados de la interfaz de referencia */
-    --accent-purple: #9d4edf;   /* Morado neón/eléctrico para el marco y focos */
-    --accent-green: #38a169;    /* Verde para Alabanzas */
-    --accent-blue: #3182ce;     /* Azul para Himnos */
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: var(--bg-global);
-    color: var(--text-pure);
-    margin: 0; 
-    padding: 20px 10px;
-    -webkit-font-smoothing: antialiased;
-}
-
+/* CONTENEDOR PRINCIPAL: Ahora centrado y en una sola columna limpia */
 .container {
-    max-width: 600px; 
-    margin: 0 auto;
-    background: #000000; /* Fondo negro absoluto para el centro */
-    padding: 30px 25px; 
-    border-radius: 16px;
-    border: 1px solid #1a1a1e; /* Borde ultra fino oscuro */
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    width: 100%;
+    max-width: 600px; /* Volvemos al ancho ideal para lectura en una columna */
+    margin: 40px auto;
+    padding: 20px;
 }
 
-/* --- CABECERA DE ALTO IMPACTO --- */
+/* --- CONTENIDO INTERACTIVO --- */
+.left-column {
+    display: flex;
+    flex-direction: column;
+}
+
 .main-header {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .main-header h1 { 
     margin: 0; 
     color: var(--text-pure); 
-    font-size: 2.1rem; 
+    font-size: 2.8rem;
     font-weight: 700;
-    letter-spacing: -0.5px;
+    letter-spacing: -1px;
 }
 
 .main-header p { 
-    margin: 6px 0 0 0; 
+    margin: 4px 0 0 2px; 
     color: var(--text-muted); 
-    font-size: 0.85rem; 
-    text-transform: lowercase; /* Fiel al estilo "música mixeria" */
-    letter-spacing: 0.5px;
+    font-size: 0.8rem; 
+    text-transform: lowercase;
+    letter-spacing: 1px;
 }
 
-/* --- INPUT DE BÚSQUEDA INDUSTRIAL --- */
+/* Input de búsqueda rectangular */
 .search-section input {
     width: 100%; 
-    padding: 15px 18px; 
-    font-size: 1rem;
-    background-color: var(--surface-card);
-    border: 1px solid #1e1e22; 
-    border-radius: 10px; 
+    padding: 15px 16px; 
+    font-size: 0.95rem;
+    background-color: transparent;
+    border: 1px solid #27272a; 
+    border-radius: 0px; 
     box-sizing: border-box;
     color: var(--text-pure);
     transition: all 0.2s ease;
 }
 
 .search-section input::placeholder {
-    color: #4c4c54;
+    color: #3f3f46;
 }
 
 .search-section input:focus { 
-    border-color: var(--accent-purple); /* Brillo morado al enfocar */
-    background-color: #000000;
-    box-shadow: 0 0 0 4px rgba(157, 78, 223, 0.15);
+    border-color: var(--text-pure); 
+    box-shadow: 0 0 0 1px var(--text-pure);
     outline: none; 
 }
 
-/* --- BOTONES DE FILTRO MINIMALISTAS --- */
+/* Botones de filtro rectangulares fusionados */
 .filter-buttons { 
     display: flex; 
-    gap: 8px; 
-    margin: 20px 0; 
+    gap: 0px; 
+    margin: 25px 0; 
+    border: 1px solid #27272a;
 }
 
 .btn-filter {
     flex: 1; 
-    padding: 11px; 
-    border: 1px solid #1e1e22; 
-    background: var(--surface-card);
-    border-radius: 8px; 
+    padding: 14px; 
+    border: none;
+    border-right: 1px solid #27272a;
+    background: transparent;
+    border-radius: 0px; 
     cursor: pointer; 
-    font-weight: 600; 
+    font-weight: 400; 
     font-size: 0.85rem;
-    color: #a0a0a9;
-    transition: all 0.2s ease;
+    color: #71717a;
+    transition: all 0.15s ease;
+}
+
+.btn-filter:last-child {
+    border-right: none;
 }
 
 .btn-filter:hover {
-    background-color: var(--surface-hover);
+    background-color: #0b0b0c;
     color: var(--text-pure);
 }
 
 .btn-filter.active { 
     background: transparent; 
-    border: 2px solid var(--accent-purple); /* Enmarcado morado como en tu captura */
+    border: 1px solid var(--accent-purple);
     color: var(--text-pure); 
+    z-index: 1;
 }
 
-/* --- LISTADO DE HIMNOS ESTILO PLAYLIST --- */
+/* --- PLAYLIST MINIMALISTA --- */
 .song-list { 
     list-style: none; 
     padding: 0; 
@@ -118,79 +101,65 @@ body {
 }
 
 .song-item {
-    background: var(--surface-card); 
-    border: 1px solid #1a1a1e;
-    border-radius: 10px;
-    margin-bottom: 8px; 
+    background: transparent; 
+    border-bottom: 1px solid #18181b;
     overflow: hidden;
-    transition: transform 0.15s ease, background 0.15s ease;
-}
-
-.song-item:hover {
-    background: var(--surface-hover);
-    transform: translateY(-1px); /* Efecto sutil de flotado */
 }
 
 .song-header {
-    padding: 16px 18px; 
+    padding: 16px 8px; 
     display: flex; 
     justify-content: space-between;
     align-items: center; 
     cursor: pointer;
+    transition: background 0.15s;
+}
+
+.song-header:hover { 
+    background: #09090b; 
 }
 
 .song-info { 
     display: flex; 
     align-items: center; 
-    gap: 12px; 
+    gap: 16px; 
 }
 
 .song-number { 
-    font-weight: 700; 
-    color: var(--accent-purple); /* El número toma el protagonismo neón */
-    font-size: 1.1rem; 
-    min-width: 40px; 
+    font-weight: 600; 
+    color: var(--accent-purple);
+    font-size: 1rem; 
+    min-width: 35px; 
 }
 
 .song-title { 
-    font-weight: 500; 
+    font-weight: 400; 
     color: #e4e4e7; 
-    font-size: 1rem;
+    font-size: 0.95rem;
 }
 
-/* Etiquetas sutiles oscuras */
 .badge-tag {
-    font-size: 0.65rem; 
-    padding: 3px 6px; 
-    border-radius: 4px;
-    background: #1f1f23; 
-    color: #a0a0a9; 
+    font-size: 0.6rem; 
+    padding: 2px 5px; 
+    background: #18181b; 
+    color: #a1a1aa; 
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-/* Bordes laterales sutiles según categoría si se desea revivir */
-.type-himnos { border-left: 4px solid var(--accent-blue); }
-.type-alabanzas { border-left: 4px solid var(--accent-green); }
-
-/* Notas musicales sólidas */
 .music-note {
-    background: #271c3a; 
-    color: #c084fc; 
-    font-size: 0.75rem;
-    padding: 4px 8px; 
-    border-radius: 5px; 
-    font-weight: bold;
+    color: #a1a1aa; 
+    font-size: 0.8rem;
+    font-weight: 600;
 }
 
-/* --- CAJA DE LETRA ESTILO REPRODUCTOR --- */
+/* Caja de letra oculta */
 .song-lyrics-container {
-    padding: 25px 20px; 
-    background: #09090b; /* Fondo aún más oscuro para concentrar la vista */
-    border-top: 1px solid #1a1a1e;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; /* Consistencia moderna */
+    padding: 35px 20px; 
+    background: #040405;
+    border-top: 1px solid #18181b;
     font-size: 1.15rem; 
-    line-height: 1.8;
+    line-height: 1.9;
     text-align: center; 
     color: #f4f4f5;
 }
