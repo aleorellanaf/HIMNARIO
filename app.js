@@ -1,7 +1,7 @@
 let canciones = [];
 let filtroTipoActual = 'todos';
 
-// Elements del DOM
+// Elementos del DOM
 const listaCanciones = document.getElementById('lista-canciones');
 const searchInput = document.getElementById('search-input');
 
@@ -14,7 +14,7 @@ async function cargarHimnario() {
     } catch (error) {
         console.error("Error al cargar el archivo canciones.json:", error);
         if (listaCanciones) {
-            listaCanciones.innerHTML = `<li class="error-msg">Error al cargar el himnario. Asegúrate de que canciones.json exista.</li>`;
+            listaCanciones.innerHTML = `<li class="error-msg" style="padding: 20px; color: #e53e3e; text-align: center;">Error al cargar el himnario. Asegúrate de que canciones.json exista.</li>`;
         }
     }
 }
@@ -27,7 +27,6 @@ function renderizarCanciones() {
     // Siempre ordenados correlativamente por ID
     canciones.sort((a, b) => a.id - b.id);
 
-    // Evitamos errores si el input no ha cargado completamente
     const termino = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
     canciones.forEach(cancion => {
@@ -72,14 +71,13 @@ if (searchInput) {
     searchInput.addEventListener('input', renderizarCanciones);
 }
 
-// Pasamos el parámetro 'e' (evento) para que sea compatible con todos los navegadores
+// Corregido pasándole el parámetro 'e' del evento explícitamente
 window.filtrarPorTipo = function(tipo, e) {
     filtroTipoActual = tipo;
     
     // Manejo visual de botones activos
     document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
     
-    // Usamos el evento de manera segura (con soporte nativo o fallback)
     const botonActivo = e ? e.target : window.event.target;
     if (botonActivo) {
         botonActivo.classList.add('active');

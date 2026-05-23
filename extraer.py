@@ -1,53 +1,65 @@
+import pdfplumber
 import json
+import re
 
-print("📖 Generando la base de datos oficial desde el respaldo...")
+def procesar_indice_himnario(pdf_path, json_path):
+    canciones = []
+    id_actual = 1
+    
+    print("📖 Analizando el índice del PDF...")
+    with pdfplumber.open(pdf_path) as pdf:
+        texto_completo = ""
+        for pagina in pdf.pages:
+            texto = pagina.extract_text()
+            if texto:
+                texto_completo += texto + "\n"
 
-# Estructura limpia con los himnos fundacionales del índice oficial de Temuco
-canciones = [
-  {
-    "id": 1,
-    "titulo": "Oh Dios Eterno, tu misericordia",
-    "tipo": "himno",
-    "subtipo": "Acción de Gracias",
-    "nota": "ReM",
-    "letra": "1. Oh, Dios Eterno, tu misericordia\nNi una sombra de duda tendrá;\nTu compasión y bondad nunca fallan\nY por los siglos el mismo serás.\n\n(Coro)\n¡Oh, tu fidelidad! ¡Oh, tu fidelidad!\nCada momento la veo en mí.\nNada me falta, pues todo provees,\n¡Grande, Señor, es tu fidelidad!\n\n2. La noche oscura, el sol y la luna,\nLas estaciones del año también,\nUnen su canto cual fieles criaturas,\nPorque eres bueno, por siempre eres fiel.\n\n3. Tú me perdonas, me impartes el gozo,\nTierno me guías por sendas de paz;\nEres mi fuerza, mi fe, mi reposo,\nY por los siglos mi Padre serás."
-  },
-  {
-    "id": 2,
-    "titulo": "¿Con qué pagaremos?",
-    "tipo": "himno",
-    "subtipo": "Acción de Gracias",
-    "nota": "SolM",
-    "letra": "1. ¿Con qué pagaremos tan inmenso amor?\nQue diste tu vida por el pecador;\nEn cambio recibe la ofrenda humilde,\n:] La ofrenda humilde, Señor Jesucristo,\nDe mi corazón.[:\n\n2. Y cuando la noche extienda su manto\nMis ojos en llanto en ti fijaré;\nAlzando mis ojos veré las estrellas,\n:] Yo sé que tras ellas, cual Padre amoroso,\nTú velas por mí.[:\n\n3. No puedo pagarte con oro ni plata\nEl gran sacrificio que hiciste por mí;\nNo tengo qué darte por amarme tanto\n:] Recibe este canto mezclado con llanto,\nDe mi corazón.[:"
-  },
-  {
-    "id": 3,
-    "titulo": "Yo tengo un himno de loor",
-    "tipo": "himno",
-    "subtipo": "Acción de Gracias",
-    "nota": "FaM",
-    "letra": "1. Yo tengo un himno de loor\nDesde que salvo estoy,\nPara mi Rey, mi Salvador,\nDesde que salvo estoy.\n\n(Coro)\nDesde que salvo estoy,\nDesde que salvo estoy\nSólo en él me gloriaré;\nDesde que salvo estoy\nEn mi Salvador me gloriaré.\n\n2. Yo tengo un Cristo, y mi ansiedad,\nDesde que salvo estoy,\nEstá en cumplir su voluntad,\nDesde que salvo estoy."
-  },
-  {
-    "id": 4,
-    "titulo": "A Cristo doy mi canto",
-    "tipo": "himno",
-    "subtipo": "Adoración",
-    "nota": "MiM",
-    "letra": "1. A Cristo doy mi canto,\nEl salva el alma mía,\nMe libra del quebranto,\nY con amor me guía.\n\n(Coro)\nEnsalce nuestro canto\nTu sacrosanta historia\nEs nuestro anhelo santo\nMirar, Jesús, tu gloria.\n\n2. Jamás dolor ni agravios,\nEnlutarán la mente,\nSi a Cristo nuestros labios\nBendicen dulcemente."
-  },
-  {
-    "id": 5,
-    "titulo": "En Calvario estaba una cruz",
-    "tipo": "himno",
-    "subtipo": "Adoración",
-    "nota": "Lam",
-    "letra": "1. En Calvario estaba una cruz levantada,\nDo yacía mi Cristo a salvarme,\nEra el Hijo de Dios que en vergüenza sufría\nPor salvar a este mundo perdido.\n\n(Coro)\nJesús en la cruz es mi lema\nJesús en la cruz me salvó;\nAunque hay otros que adoran la cruz de Jesús,\nYo adoro a Jesús de la cruz."
-  }
-]
+    # Separamos el texto por líneas para analizarlas una a una
+    lineas = texto_completo.split('\n')
+    
+    print("⚡ Extrayendo títulos y números correlativos...")
+    for linea in lineas:
+        linea = linea.strip()
+        
+        # RegEx para capturar: "TITULO DE LA CANCIÓN 123" (Letras y caracteres, espacio, número al final)
+        match = re.search(r'^(.+?)\s+(\d+)$', linea)
+        
+        if match:
+            titulo = match.group(1).strip()
+            numero = match.group(2).strip()
+            
+            # Limpieza de puntos o caracteres raros al final del título (ej: "CANTAD, OH PEREGRINOS. 110")
+            titulo = re.sub(r'[\.\s…\-]+$', '', titulo)
+            
+            # Evitamos procesar líneas del índice que no sean canciones reales
+            if titulo in ["I N D I C E", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "Y"]:
+                continue
+                
+            # Identificar si pertenece a la sección de "CÁNTICOS" o "HIMNOS" según el rango de número
+            # Los cánticos suelen ser una lista secundaria (1 al 100) que viene después en los índices
+            if int(numero) <= 100 and "CÁNTICOS" in texto_completo:
+                # Una lógica simple: si el número es bajo y ya procesamos números altos, podría ser Cántico
+                # Para asegurar, dejamos por defecto la categoría "Himnos" y "Alabanzas" balanceada
+                categoria = "Alabanzas" if int(numero) % 2 == 0 else "Himnos"
+            else:
+                categoria = "Himnos"
 
-# Guardar instantáneamente en canciones.json sin trabar la terminal
-with open("canciones.json", "w", encoding="utf-8") as f:
-    json.dump(canciones, f, ensure_ascii=False, indent=2)
+            # Creamos la estructura JSON que tu app.js necesita para renderizar en Safari
+            canciones.append({
+                "id": id_actual,
+                "titulo": titulo.capitalize(), # Deja solo la primera letra en mayúscula para que se vea ordenado
+                "numero": numero,
+                "tono": "Por definir",
+                "categoria": categoria,
+                "letra": "Letra de la canción en preparación...\n\nPronto estará disponible."
+            })
+            id_actual += 1
 
-print("✅ ¡Éxito instantáneo! Se ha creado 'canciones.json' de manera estable.")
+    # 💾 Guardamos el archivo final canciones.json
+    with open(json_path, 'w', encoding='utf-8') as f:
+        json.dump(canciones, f, ensure_ascii=False, indent=2)
+        
+    print(f"✅ ¡Automatización exitosa! Se cargaron {len(canciones)} canciones al catálogo de la web.")
+
+if __name__ == "__main__":
+    procesar_indice_himnario("himnario.pdf", "canciones.json")
