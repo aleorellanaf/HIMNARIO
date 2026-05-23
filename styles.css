@@ -1,7 +1,33 @@
-/* CONTENEDOR PRINCIPAL: Ahora centrado y en una sola columna limpia */
+/* ==========================================================================
+   HIMNARIO DIGITAL - VERSÍON COMPLETA DARK INDUSTRIAL (CENTRADA)
+   ========================================================================== */
+
+:root {
+    --bg-global: #000000;       /* Negro absoluto */
+    --surface-card: #0b0b0c;    /* Gris mínimo para bloques oscuros */
+    --surface-hover: #141417;   /* Hover sutil para las canciones */
+    --text-pure: #ffffff;       /* Blanco puro para tipografía principal */
+    --text-muted: #52525b;      /* Gris oscuro apagado para subtítulos */
+    --accent-purple: #9d4edf;   /* Morado neón de tu diseño */
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-global) !important;
+    color: var(--text-pure) !important;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* CONTENEDOR PRINCIPAL: Centrado y en una sola columna limpia */
 .container {
     width: 100%;
-    max-width: 600px; /* Volvemos al ancho ideal para lectura en una columna */
+    max-width: 600px;
     margin: 40px auto;
     padding: 20px;
 }
@@ -88,7 +114,7 @@
 
 .btn-filter.active { 
     background: transparent; 
-    border: 1px solid var(--accent-purple);
+    border: 1px solid var(--accent-purple) !important;
     color: var(--text-pure); 
     z-index: 1;
 }
