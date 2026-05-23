@@ -1,13 +1,13 @@
 [
-  {
-    "id": 1,
-    "titulo": "Oh, Dios Eterno, Tu Misericordia",
-    "numero": 1,
-    "tono": "Por definir",
-    "categoria": "HIMNOS",
-    "tipo": "himnos",
-    "letra": "Letra en preparación..."
-  },
+{
+  "id": 1,
+  "titulo": "Oh Dios Eterno Tu Misericordia",
+  "numero": 1,
+  "tono": "Por definir",
+  "categoria": "HIMNOS",
+  "tipo": "himnos",
+  "letra": "1. Oh, Dios Eterno, tu misericordia\nNi una sombra de duda tendrá;\nTu compasión y bondad nunca fallan\nY por los siglos el mismo serás.\n\nCORO:\n¡Oh, tu fidelidad! ¡Oh, tu fidelidad!\nCada momento la veo en mí.\nNada me falta, pues todo provees,\n¡Grande, Señor, es tu fidelidad!\n\n2. La noche oscura, el sol y la luna,\nLas estaciones del año también,\nUnen su canto cual fieles criaturas,\nPorque eres bueno, por siempre eres fiel.\n\n3. Tú me perdonas, me impartes el gozo,\nTierno me guías por sendas de paz;\nEres mi fuerza, mi fe, mi reposo,\nY por los siglos mi Padre serás."
+}
   {
     "id": 2,
     "titulo": "¿Con Qué Pagaremos?",
