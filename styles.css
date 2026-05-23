@@ -1,20 +1,16 @@
-/* ==========================================================================
-   HIMNARIO DIGITAL - VERSÍON COMPLETA DARK INDUSTRIAL (CENTRADA)
-   ========================================================================== */
-
 :root {
     --bg-global: #000000;       /* Negro absoluto */
     --surface-card: #0b0b0c;    /* Gris mínimo para bloques oscuros */
     --surface-hover: #141417;   /* Hover sutil para las canciones */
-    --text-pure: #ffffff;       /* Blanco puro para tipografía principal */
-    --text-muted: #52525b;      /* Gris oscuro apagado para subtítulos */
+    --text-pure: #ffffff;       /* Blanco puro */
+    --text-muted: #a1a1aa;      /* Gris claro para subtítulos y descripciones */
     --accent-purple: #9d4edf;   /* Morado neón de tu diseño */
 }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: var(--bg-global) !important;
-    color: var(--text-pure) !important;
+    background-color: #000000 !important;
+    color: #ffffff !important;
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -44,7 +40,7 @@ body {
 
 .main-header h1 { 
     margin: 0; 
-    color: var(--text-pure); 
+    color: #ffffff !important; /* Forzado a Blanco Puro */
     font-size: 2.8rem;
     font-weight: 700;
     letter-spacing: -1px;
@@ -52,7 +48,7 @@ body {
 
 .main-header p { 
     margin: 4px 0 0 2px; 
-    color: var(--text-muted); 
+    color: #a1a1aa !important; /* Forzado a Gris Claro */
     font-size: 0.8rem; 
     text-transform: lowercase;
     letter-spacing: 1px;
@@ -67,17 +63,17 @@ body {
     border: 1px solid #27272a; 
     border-radius: 0px; 
     box-sizing: border-box;
-    color: var(--text-pure);
+    color: #ffffff !important; /* Texto que escribe el usuario en Blanco */
     transition: all 0.2s ease;
 }
 
 .search-section input::placeholder {
-    color: #3f3f46;
+    color: #52525b;
 }
 
 .search-section input:focus { 
-    border-color: var(--text-pure); 
-    box-shadow: 0 0 0 1px var(--text-pure);
+    border-color: #ffffff; 
+    box-shadow: 0 0 0 1px #ffffff;
     outline: none; 
 }
 
@@ -99,7 +95,7 @@ body {
     cursor: pointer; 
     font-weight: 400; 
     font-size: 0.85rem;
-    color: #71717a;
+    color: #71717a; /* Texto inactivo en gris */
     transition: all 0.15s ease;
 }
 
@@ -109,13 +105,13 @@ body {
 
 .btn-filter:hover {
     background-color: #0b0b0c;
-    color: var(--text-pure);
+    color: #ffffff;
 }
 
 .btn-filter.active { 
     background: transparent; 
     border: 1px solid var(--accent-purple) !important;
-    color: var(--text-pure); 
+    color: #ffffff !important; /* Texto activo en Blanco */
     z-index: 1;
 }
 
@@ -153,14 +149,14 @@ body {
 
 .song-number { 
     font-weight: 600; 
-    color: var(--accent-purple);
+    color: var(--accent-purple); /* Número en Morado Neón */
     font-size: 1rem; 
     min-width: 35px; 
 }
 
 .song-title { 
     font-weight: 400; 
-    color: #e4e4e7; 
+    color: #ffffff !important; /* Títulos de canciones en Blanco Puro */
     font-size: 0.95rem;
 }
 
@@ -168,7 +164,7 @@ body {
     font-size: 0.6rem; 
     padding: 2px 5px; 
     background: #18181b; 
-    color: #a1a1aa; 
+    color: #a1a1aa !important; /* Etiqueta en Gris Claro */
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -187,5 +183,5 @@ body {
     font-size: 1.15rem; 
     line-height: 1.9;
     text-align: center; 
-    color: #f4f4f5;
+    color: #ffffff !important; /* Letra del himno desplegada en Blanco Puro */
 }
