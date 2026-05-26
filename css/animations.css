@@ -1,0 +1,219 @@
+/* =============================================================================
+   ANIMATIONS.CSS — Animaciones y Transiciones Globales
+   Himnario Digital IDS Lanín
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   1. ANIMACIONES DE ENTRADA GLOBALES
+   ----------------------------------------------------------------------------- */
+
+/* Fade in genérico */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Slide up */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide down */
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Scale in */
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Pulse del acento */
+@keyframes pulse-accent {
+  0%, 100% { box-shadow: 0 0 0 0 var(--color-accent-glow); }
+  50%       { box-shadow: 0 0 0 8px transparent; }
+}
+
+/* Latido del corazón (favorito) */
+@keyframes heartbeat {
+  0%   { transform: scale(1); }
+  25%  { transform: scale(1.3); }
+  50%  { transform: scale(1); }
+  75%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* Shimmer (skeleton loading) */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Bounce suave */
+@keyframes bounce-soft {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-4px); }
+}
+
+/* Rotación */
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Parpadeo */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* -----------------------------------------------------------------------------
+   2. CLASES DE ANIMACIÓN UTILITARIAS
+   ----------------------------------------------------------------------------- */
+
+.animate-fade-in {
+  animation: fade-in var(--transition-normal) ease both;
+}
+
+.animate-slide-up {
+  animation: slide-up var(--transition-normal) ease both;
+}
+
+.animate-scale-in {
+  animation: scale-in var(--transition-spring) both;
+}
+
+/* Animación de favorito */
+.animate-heartbeat {
+  animation: heartbeat 0.5s ease-in-out;
+}
+
+/* Skeleton loader */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-card) 25%,
+    var(--color-surface) 50%,
+    var(--color-bg-card) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+  color: transparent;
+  user-select: none;
+}
+
+/* Tarjeta skeleton */
+.hymn-card--skeleton {
+  pointer-events: none;
+  animation: none;
+}
+
+.hymn-card--skeleton .hymn-card__number {
+  width: 48px;
+  height: 48px;
+}
+
+.hymn-card--skeleton .hymn-card__title {
+  height: 1em;
+  width: 70%;
+  margin-bottom: var(--space-1);
+}
+
+.hymn-card--skeleton .hymn-card__category {
+  height: 0.75em;
+  width: 40%;
+}
+
+/* -----------------------------------------------------------------------------
+   3. TRANSICIONES DE PÁGINA / VISTA
+   ----------------------------------------------------------------------------- */
+
+/* Transición al cambiar de vista (grid ↔ lista) */
+.hymns-grid {
+  transition: grid-template-columns var(--transition-normal);
+}
+
+/* Fade al cambiar categoría */
+.hymns-grid.is-filtering {
+  animation: fade-in var(--transition-fast) ease both;
+}
+
+/* -----------------------------------------------------------------------------
+   4. EFECTOS DE INTERACCIÓN
+   ----------------------------------------------------------------------------- */
+
+/* Ripple effect en tarjetas */
+.hymn-card .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--color-accent-glow);
+  transform: scale(0);
+  animation: ripple-expand 0.5s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes ripple-expand {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Glow en el badge de favoritos al actualizarse */
+.badge.updated {
+  animation: pulse-accent 0.4s ease-out;
+}
+
+/* Scroll suave para el modal */
+.modal__body {
+  scroll-behavior: smooth;
+}
+
+/* Indicador de carga de más himnos */
+.load-more-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  gap: var(--space-3);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.load-more-indicator .spinner {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+}
+
+/* -----------------------------------------------------------------------------
+   5. TRANSICIÓN DE TEMA (por si se agrega modo claro en el futuro)
+   ----------------------------------------------------------------------------- */
+body {
+  transition:
+    background-color var(--transition-slow),
+    color var(--transition-slow);
+}
+
+/* -----------------------------------------------------------------------------
+   6. REDUCIR MOVIMIENTO — Accesibilidad
+   ----------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .skeleton {
+    animation: none;
+    background: var(--color-surface);
+  }
+}

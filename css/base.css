@@ -1,0 +1,602 @@
+/* =============================================================================
+   BASE.CSS — Reset, Variables CSS y Estilos Globales
+   Himnario Digital IDS Lanín
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   1. VARIABLES CSS — Design Tokens AMOLED
+   ----------------------------------------------------------------------------- */
+:root {
+  /* Colores principales */
+  --color-bg:           #000000;
+  --color-bg-elevated:  #0a0a0a;
+  --color-bg-card:      #0f0f0f;
+  --color-bg-card-hover:#141414;
+  --color-bg-modal:     #080808;
+  --color-surface:      #1a1a1a;
+  --color-surface-2:    #242424;
+  --color-border:       #1e1e1e;
+  --color-border-focus: #9d4edf;
+
+  /* Acento principal: Púrpura */
+  --color-accent:       #9d4edf;
+  --color-accent-light: #b87aed;
+  --color-accent-dark:  #7b2fbf;
+  --color-accent-glow:  rgba(157, 78, 223, 0.25);
+  --color-accent-subtle:rgba(157, 78, 223, 0.12);
+  --color-accent-muted: rgba(157, 78, 223, 0.06);
+
+  /* Texto */
+  --color-text-primary:   #f0f0f0;
+  --color-text-secondary: #a0a0a0;
+  --color-text-tertiary:  #606060;
+  --color-text-disabled:  #404040;
+  --color-text-accent:    #b87aed;
+
+  /* Estados */
+  --color-success:  #4caf82;
+  --color-warning:  #f0a500;
+  --color-error:    #e05252;
+  --color-info:     #4a9eff;
+
+  /* Tipografía */
+  --font-family:      'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                      'Helvetica Neue', Arial, sans-serif;
+  --font-size-xs:     0.75rem;    /* 12px */
+  --font-size-sm:     0.875rem;   /* 14px */
+  --font-size-base:   1rem;       /* 16px */
+  --font-size-md:     1.0625rem;  /* 17px */
+  --font-size-lg:     1.125rem;   /* 18px */
+  --font-size-xl:     1.25rem;    /* 20px */
+  --font-size-2xl:    1.5rem;     /* 24px */
+  --font-size-3xl:    1.875rem;   /* 30px */
+
+  --font-weight-light:   300;
+  --font-weight-regular: 400;
+  --font-weight-medium:  500;
+  --font-weight-semibold:600;
+  --font-weight-bold:    700;
+
+  --line-height-tight:  1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed:1.75;
+  --line-height-loose:  2.0;
+
+  /* Espaciado */
+  --space-1:  0.25rem;   /* 4px */
+  --space-2:  0.5rem;    /* 8px */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+
+  /* Bordes */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   20px;
+  --radius-full: 9999px;
+
+  /* Sombras */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.6), 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.7), 0 2px 6px rgba(0,0,0,0.5);
+  --shadow-lg:  0 10px 30px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.6);
+  --shadow-accent: 0 0 20px rgba(157, 78, 223, 0.3);
+
+  /* Transiciones */
+  --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:   400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Layout */
+  --navbar-height:    64px;
+  --search-height:    auto;
+  --content-max-width: 1200px;
+  --sidebar-width:    280px;
+
+  /* Z-index */
+  --z-base:    0;
+  --z-card:    10;
+  --z-sticky:  100;
+  --z-modal:   200;
+  --z-toast:   300;
+  --z-top:     400;
+
+  /* Modo lectura — fuente ajustable */
+  --reading-font-size: 16px;
+  --reading-line-height: 1.8;
+}
+
+/* -----------------------------------------------------------------------------
+   2. RESET MODERNO
+   ----------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  min-height: 100%;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Accesibilidad: foco visible */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Ocultar outline en interacciones con mouse */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Imágenes responsivas */
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Botones base */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+/* Inputs base */
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* Listas */
+ul, ol {
+  list-style: none;
+}
+
+/* Anclas */
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-accent-light);
+}
+
+/* Selección de texto */
+::selection {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-text-primary);
+}
+
+/* Scrollbar personalizado (Webkit) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-2);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-dark);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-surface-2) var(--color-bg);
+}
+
+/* -----------------------------------------------------------------------------
+   3. UTILIDADES GLOBALES
+   ----------------------------------------------------------------------------- */
+
+/* Visualmente oculto pero accesible para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Ocultar elemento */
+.hidden {
+  display: none !important;
+}
+
+/* Visibilidad sin display */
+.invisible {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Contenedor principal */
+.container {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+/* Botón icono base */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  background: transparent;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.btn-icon svg {
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.btn-icon:hover {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.btn-icon:active {
+  transform: scale(0.92);
+  background-color: var(--color-surface-2);
+}
+
+.btn-icon--sm {
+  width: 32px;
+  height: 32px;
+}
+
+.btn-icon--sm svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Botón secundario */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  background: transparent;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-accent-subtle);
+}
+
+/* Botón de navegación (modal) */
+.btn-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.btn-nav svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-nav:hover {
+  background-color: var(--color-surface-2);
+  color: var(--color-text-primary);
+}
+
+.btn-nav:active {
+  transform: scale(0.96);
+}
+
+.btn-nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Badge contador */
+.badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  line-height: 16px;
+  text-align: center;
+  pointer-events: none;
+  transition: transform var(--transition-spring);
+}
+
+.badge.hidden {
+  display: none !important;
+}
+
+/* Spinner de carga */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-surface-2);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Estado de carga */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-12) var(--space-4);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+/* Estado vacío */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-12) var(--space-4);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.empty-state svg {
+  width: 56px;
+  height: 56px;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-2);
+}
+
+.empty-state h2 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.empty-state p {
+  font-size: var(--font-size-sm);
+  max-width: 280px;
+}
+
+/* Contenido principal */
+.main-content {
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-12);
+  min-height: calc(100dvh - var(--navbar-height) - 160px);
+}
+
+/* Botón scroll to top */
+.scroll-top-btn {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-4);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-accent), var(--shadow-md);
+  z-index: var(--z-top);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-spring),
+    visibility var(--transition-normal);
+}
+
+.scroll-top-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.scroll-top-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(157, 78, 223, 0.5), var(--shadow-lg);
+}
+
+.scroll-top-btn:active {
+  transform: scale(0.92);
+}
+
+.scroll-top-btn.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  pointer-events: none;
+  display: flex !important; /* Sobrescribir .hidden para animación */
+}
+
+/* Toast de notificaciones */
+.toast-container {
+  position: fixed;
+  bottom: var(--space-6);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  pointer-events: none;
+  width: min(340px, calc(100vw - 2rem));
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  pointer-events: auto;
+  animation: toast-in var(--transition-spring) forwards;
+}
+
+.toast--success { border-left: 3px solid var(--color-success); }
+.toast--error   { border-left: 3px solid var(--color-error); }
+.toast--info    { border-left: 3px solid var(--color-accent); }
+
+.toast.toast--out {
+  animation: toast-out var(--transition-normal) forwards;
+}
+
+.toast svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-8px) scale(0.95); }
+}
+
+/* -----------------------------------------------------------------------------
+   4. LAYOUT RESPONSIVO BASE
+   ----------------------------------------------------------------------------- */
+.search-section {
+  position: sticky;
+  top: var(--navbar-height);
+  z-index: var(--z-sticky);
+  background-color: var(--color-bg);
+  padding: var(--space-3) var(--space-4) var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Sentinel para Intersection Observer (paginación) */
+.pagination-sentinel {
+  height: 1px;
+  margin-top: var(--space-4);
+}
+
+/* Highlight de texto en búsqueda */
+mark {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent-light);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* Responsive: pantallas grandes */
+@media (min-width: 768px) {
+  .search-section {
+    padding: var(--space-4) var(--space-6) var(--space-3);
+  }
+
+  .main-content {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .main-content {
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
+  }
+}
+
+/* Safe area para dispositivos con notch */
+@supports (padding: max(0px)) {
+  .navbar {
+    padding-left: max(var(--space-4), env(safe-area-inset-left));
+    padding-right: max(var(--space-4), env(safe-area-inset-right));
+  }
+
+  .main-content {
+    padding-bottom: max(var(--space-12), env(safe-area-inset-bottom));
+  }
+}

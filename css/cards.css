@@ -1,0 +1,385 @@
+/* =============================================================================
+   CARDS.CSS — Tarjetas de Himnos (Grid y Lista)
+   Himnario Digital IDS Lanín
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   1. GRILLA PRINCIPAL
+   ----------------------------------------------------------------------------- */
+.hymns-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-3);
+  padding: var(--space-4);
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+/* Vista de lista */
+.hymns-grid.view-list {
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+}
+
+/* -----------------------------------------------------------------------------
+   2. TARJETA BASE
+   ----------------------------------------------------------------------------- */
+.hymn-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    background-color var(--transition-normal),
+    border-color var(--transition-normal),
+    transform var(--transition-spring),
+    box-shadow var(--transition-normal);
+  will-change: transform;
+  /* Animación de entrada */
+  animation: card-appear var(--transition-normal) both;
+}
+
+/* Línea de acento izquierda */
+.hymn-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+  background-color: transparent;
+  transition: background-color var(--transition-normal), top var(--transition-normal), bottom var(--transition-normal);
+}
+
+/* Brillo de fondo al hover */
+.hymn-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 20% 50%,
+    var(--color-accent-muted) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+.hymn-card:hover {
+  background-color: var(--color-bg-card-hover);
+  border-color: var(--color-accent-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--color-accent-dark);
+}
+
+.hymn-card:hover::before {
+  background-color: var(--color-accent);
+  top: 15%;
+  bottom: 15%;
+}
+
+.hymn-card:hover::after {
+  opacity: 1;
+}
+
+.hymn-card:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Tarjeta favorita */
+.hymn-card.is-favorite {
+  border-color: var(--color-accent-dark);
+}
+
+.hymn-card.is-favorite::before {
+  background-color: var(--color-accent);
+  top: 10%;
+  bottom: 10%;
+  opacity: 0.6;
+}
+
+/* -----------------------------------------------------------------------------
+   3. CONTENIDO DE LA TARJETA
+   ----------------------------------------------------------------------------- */
+.hymn-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* Número del himno */
+.hymn-card__number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-accent-muted);
+  border: 1px solid var(--color-accent-subtle);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent-light);
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+  transition:
+    background-color var(--transition-normal),
+    color var(--transition-normal);
+}
+
+.hymn-card:hover .hymn-card__number {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent-light);
+}
+
+/* Botón favorito en tarjeta */
+.hymn-card__favorite {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+  background: transparent;
+  flex-shrink: 0;
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    transform var(--transition-spring);
+  z-index: 1;
+}
+
+.hymn-card__favorite svg {
+  width: 16px;
+  height: 16px;
+  transition: fill var(--transition-fast);
+}
+
+.hymn-card__favorite:hover {
+  color: var(--color-accent);
+  background-color: var(--color-accent-muted);
+}
+
+.hymn-card__favorite.active {
+  color: var(--color-accent);
+}
+
+.hymn-card__favorite.active svg {
+  fill: var(--color-accent);
+}
+
+.hymn-card__favorite:active {
+  transform: scale(0.85);
+}
+
+/* Cuerpo de la tarjeta */
+.hymn-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+/* Título del himno */
+.hymn-card__title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.01em;
+  /* Truncar en 2 líneas */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color var(--transition-fast);
+}
+
+.hymn-card:hover .hymn-card__title {
+  color: var(--color-accent-light);
+}
+
+/* Categoría */
+.hymn-card__category {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Extracto de letra */
+.hymn-card__excerpt {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  line-height: var(--line-height-normal);
+  /* Truncar en 2 líneas */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: var(--space-1);
+  font-style: italic;
+}
+
+/* Pie de tarjeta */
+.hymn-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-1);
+}
+
+/* Flecha indicadora */
+.hymn-card__arrow {
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-tertiary);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal),
+    color var(--transition-normal);
+}
+
+.hymn-card:hover .hymn-card__arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--color-accent);
+}
+
+/* -----------------------------------------------------------------------------
+   4. VISTA DE LISTA (modo compacto)
+   ----------------------------------------------------------------------------- */
+.view-list .hymn-card {
+  flex-direction: row;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  gap: var(--space-3);
+}
+
+.view-list .hymn-card__header {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+}
+
+.view-list .hymn-card__number {
+  min-width: 44px;
+  height: 44px;
+  font-size: var(--font-size-xs);
+}
+
+.view-list .hymn-card__body {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+}
+
+.view-list .hymn-card__title {
+  -webkit-line-clamp: 1;
+  flex: 1;
+}
+
+.view-list .hymn-card__category {
+  flex-shrink: 0;
+  font-size: 10px;
+}
+
+.view-list .hymn-card__excerpt {
+  display: none;
+}
+
+.view-list .hymn-card__footer {
+  margin-top: 0;
+}
+
+.view-list .hymn-card__favorite {
+  flex-shrink: 0;
+}
+
+/* -----------------------------------------------------------------------------
+   5. ANIMACIONES DE ENTRADA
+   ----------------------------------------------------------------------------- */
+@keyframes card-appear {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Delay escalonado para las primeras tarjetas */
+.hymn-card:nth-child(1)  { animation-delay: 0ms; }
+.hymn-card:nth-child(2)  { animation-delay: 30ms; }
+.hymn-card:nth-child(3)  { animation-delay: 60ms; }
+.hymn-card:nth-child(4)  { animation-delay: 90ms; }
+.hymn-card:nth-child(5)  { animation-delay: 120ms; }
+.hymn-card:nth-child(6)  { animation-delay: 150ms; }
+.hymn-card:nth-child(7)  { animation-delay: 180ms; }
+.hymn-card:nth-child(8)  { animation-delay: 210ms; }
+.hymn-card:nth-child(n+9) { animation-delay: 0ms; }
+
+/* Reducir movimiento para usuarios que lo prefieren */
+@media (prefers-reduced-motion: reduce) {
+  .hymn-card {
+    animation: none;
+    transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .hymn-card:hover {
+    transform: none;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   6. RESPONSIVE
+   ----------------------------------------------------------------------------- */
+@media (min-width: 480px) {
+  .hymns-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .hymns-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-4);
+  }
+}
+
+@media (max-width: 360px) {
+  .hymns-grid {
+    grid-template-columns: 1fr;
+    padding: var(--space-3);
+  }
+
+  .hymn-card__number {
+    min-width: 40px;
+    height: 40px;
+  }
+}

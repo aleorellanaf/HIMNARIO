@@ -1,0 +1,405 @@
+/* =============================================================================
+   MODAL.CSS — Modal de Lectura de Himnos
+   Himnario Digital IDS Lanín
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   1. OVERLAY
+   ----------------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: flex-end;      /* Bottom sheet en móvil */
+  justify-content: center;
+  padding: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity var(--transition-normal),
+    visibility var(--transition-normal);
+}
+
+.modal-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* En pantallas grandes: centrado */
+@media (min-width: 768px) {
+  .modal-overlay {
+    align-items: center;
+    padding: var(--space-6);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   2. CONTENEDOR DEL MODAL
+   ----------------------------------------------------------------------------- */
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  max-height: 95dvh;
+  max-height: 95vh;
+  background-color: var(--color-bg-modal);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  /* Móvil: bottom sheet con bordes superiores redondeados */
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+
+  /* Animación de entrada */
+  transform: translateY(100%);
+  transition: transform var(--transition-slow) cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.modal-overlay.is-open .modal {
+  transform: translateY(0);
+}
+
+/* En pantallas grandes: modal centrado */
+@media (min-width: 768px) {
+  .modal {
+    border-radius: var(--radius-xl);
+    max-height: 90dvh;
+    max-height: 90vh;
+    transform: translateY(20px) scale(0.97);
+    transition: transform var(--transition-spring), opacity var(--transition-normal);
+    opacity: 0;
+  }
+
+  .modal-overlay.is-open .modal {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Handle visual (drag indicator) en móvil */
+.modal::before {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-2);
+  margin: var(--space-3) auto var(--space-1);
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .modal::before {
+    display: none;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   3. CABECERA DEL MODAL
+   ----------------------------------------------------------------------------- */
+.modal__header {
+  padding: var(--space-4) var(--space-5) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+  background-color: var(--color-bg-modal);
+  position: relative;
+}
+
+/* Degradado de acento en la parte superior */
+.modal__header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent),
+    var(--color-accent-light),
+    var(--color-accent),
+    transparent
+  );
+  opacity: 0.7;
+}
+
+.modal__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.modal__number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px var(--space-3);
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent-subtle);
+  border: 1px solid var(--color-accent-dark);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent-light);
+  letter-spacing: 0.06em;
+}
+
+.modal__category {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.modal__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-3);
+  padding-right: var(--space-8);
+}
+
+/* Acciones del modal */
+.modal__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+/* Control de tamaño de fuente */
+.font-size-control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 2px;
+  margin-right: var(--space-1);
+}
+
+.font-size-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  min-width: 32px;
+  text-align: center;
+  user-select: none;
+}
+
+/* Botón favorito en modal */
+.btn-favorite-modal {
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    transform var(--transition-spring);
+}
+
+.btn-favorite-modal.active {
+  color: var(--color-accent);
+  background-color: var(--color-accent-muted);
+}
+
+.btn-favorite-modal.active svg {
+  fill: var(--color-accent);
+  stroke: var(--color-accent);
+}
+
+.btn-favorite-modal:active {
+  transform: scale(0.85);
+}
+
+/* Botón cerrar */
+.btn-close-modal {
+  margin-left: auto;
+}
+
+/* -----------------------------------------------------------------------------
+   4. CUERPO DEL MODAL (letra del himno)
+   ----------------------------------------------------------------------------- */
+.modal__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-6) var(--space-5);
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Letra del himno */
+.hymn-lyrics {
+  font-size: var(--reading-font-size);
+  line-height: var(--reading-line-height);
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-weight: var(--font-weight-light);
+  letter-spacing: 0.01em;
+  transition: font-size var(--transition-normal);
+  max-width: 60ch;
+  margin: 0 auto;
+}
+
+/* Estrofas y coros */
+.hymn-lyrics .stanza {
+  margin-bottom: var(--space-6);
+}
+
+.hymn-lyrics .stanza-number {
+  display: block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-2);
+}
+
+.hymn-lyrics .chorus {
+  margin: var(--space-4) 0;
+  padding: var(--space-4) var(--space-5);
+  border-left: 2px solid var(--color-accent);
+  background-color: var(--color-accent-muted);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.hymn-lyrics .chorus-label {
+  display: block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-2);
+}
+
+/* Líneas de la letra */
+.hymn-lyrics .line {
+  display: block;
+  min-height: 1.4em;
+}
+
+/* Línea vacía = separador de estrofa */
+.hymn-lyrics .line-empty {
+  display: block;
+  height: var(--space-4);
+}
+
+/* Highlight de búsqueda en la letra */
+.hymn-lyrics mark {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent-light);
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+/* -----------------------------------------------------------------------------
+   5. PIE DEL MODAL (navegación)
+   ----------------------------------------------------------------------------- */
+.modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+  background-color: var(--color-bg-modal);
+  gap: var(--space-3);
+}
+
+.modal__position {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+/* -----------------------------------------------------------------------------
+   6. ANIMACIONES DE TRANSICIÓN DE CONTENIDO
+   ----------------------------------------------------------------------------- */
+.hymn-lyrics.transitioning {
+  animation: lyrics-fade var(--transition-normal) ease both;
+}
+
+@keyframes lyrics-fade {
+  0%   { opacity: 0; transform: translateX(12px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.hymn-lyrics.transitioning-prev {
+  animation: lyrics-fade-prev var(--transition-normal) ease both;
+}
+
+@keyframes lyrics-fade-prev {
+  0%   { opacity: 0; transform: translateX(-12px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* -----------------------------------------------------------------------------
+   7. REDUCIR MOVIMIENTO
+   ----------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .modal {
+    transition: opacity var(--transition-fast);
+    transform: none !important;
+  }
+
+  .modal-overlay.is-open .modal {
+    transform: none !important;
+  }
+
+  .hymn-lyrics.transitioning,
+  .hymn-lyrics.transitioning-prev {
+    animation: none;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   8. RESPONSIVE
+   ----------------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .modal__header {
+    padding: var(--space-5) var(--space-6) var(--space-4);
+  }
+
+  .modal__body {
+    padding: var(--space-8) var(--space-6);
+  }
+
+  .modal__footer {
+    padding: var(--space-4) var(--space-6);
+  }
+
+  .modal__title {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+@media (max-width: 360px) {
+  .modal__header {
+    padding: var(--space-3) var(--space-4) var(--space-2);
+  }
+
+  .modal__body {
+    padding: var(--space-4) var(--space-4);
+  }
+
+  .modal__title {
+    font-size: var(--font-size-lg);
+  }
+
+  .font-size-label {
+    display: none;
+  }
+}
