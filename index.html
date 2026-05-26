@@ -4,11 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IDS Lanín | Himnario Digital</title>
+  
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#7c3aed">
+  <meta name="theme-color" content="#6366f1">
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
   <nav class="navbar">
     <div class="nav-brand">IDS<span>LANÍN</span></div>
     <div class="nav-links">
@@ -20,31 +28,51 @@
   </nav>
 
   <main class="container">
+    
     <section id="inicio" class="section active">
       <h1 class="hero-title">IDS <span>Lanín</span></h1>
-      <p id="hero-subtitle">Cargando...</p>
+      <p id="hero-subtitle">Cargando himnario...</p>
+      
       <div class="card-grid">
         <div class="card">
             <h2>Próximos Cultos</h2>
             <p>Martes 19:30 - Doctrina</p>
             <p>Jueves 19:30 - Alabanza</p>
-            <p>Domingo 10:30/12:00 - Escuela/Culto</p>
+            <p>Domingo 10:30 - Escuela / 12:00 - Culto</p>
         </div>
       </div>
     </section>
 
     <section id="himnario" class="section">
-      <input type="search" id="search-input" placeholder="Buscar..." oninput="filtrar()">
+      <input type="search" id="search-input" placeholder="🔍 Buscar por número o título..." oninput="filtrar()">
+      
       <div class="category-tabs">
         <button class="tab active" onclick="filtrarCategoria('todas', this)">Todas</button>
         <button class="tab" onclick="filtrarCategoria('himnos', this)">Himnos</button>
         <button class="tab" onclick="filtrarCategoria('alabanzas', this)">Alabanzas</button>
       </div>
+      
       <ul id="lista-canciones" class="song-list"></ul>
-      <p id="empty-msg" style="display:none">No se encontraron resultados.</p>
+      <p id="empty-msg" class="empty-msg" style="display:none">No se encontraron resultados.</p>
     </section>
 
-    </main>
+    <section id="historia" class="section">
+      <h2>Nuestra Historia</h2>
+      <div class="card">
+        <p>La Iglesia del Señor Sector Lanín es una congregación fundamentada en la Palabra de Dios, dedicada a la proclamación del Evangelio en la ciudad de Temuco.</p>
+      </div>
+    </section>
+
+    <section id="contacto" class="section">
+      <h2>Contacto</h2>
+      <div class="card">
+        <p>Síguenos en Instagram:</p>
+        <a href="https://www.instagram.com/ids_lanin" target="_blank" class="btn-instagram">@ids_lanin</a>
+      </div>
+    </section>
+
+  </main>
+
   <script src="app.js"></script>
 </body>
 </html>
