@@ -1,33 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IDS LANÍN | Himnario Digital</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IDS Lanín | Himnario Digital</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#7c3aed">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <nav class="navbar">
-        <button class="nav-btn active" onclick="cambiarSeccion('himnario')">Himnario</button>
-        <button class="nav-btn" onclick="cambiarSeccion('eventos')">Eventos</button>
-    </nav>
+  <nav class="navbar">
+    <div class="nav-brand">IDS<span>LANÍN</span></div>
+    <div class="nav-links">
+      <button class="nav-btn active" onclick="cambiarSeccion('inicio', this)">Inicio</button>
+      <button class="nav-btn" onclick="cambiarSeccion('himnario', this)">Himnario</button>
+      <button class="nav-btn" onclick="cambiarSeccion('historia', this)">Historia</button>
+      <button class="nav-btn" onclick="cambiarSeccion('contacto', this)">Contacto</button>
+    </div>
+  </nav>
 
-    <main class="container">
-        <section id="himnario" class="section active">
-            <input type="text" id="search-input" placeholder="🔍 Buscar por número o título..." autocomplete="off">
-            <div id="lista-canciones"></div>
-        </section>
-
-        <section id="eventos" class="section">
+  <main class="container">
+    <section id="inicio" class="section active">
+      <h1 class="hero-title">IDS <span>Lanín</span></h1>
+      <p id="hero-subtitle">Cargando...</p>
+      <div class="card-grid">
+        <div class="card">
             <h2>Próximos Cultos</h2>
-            <div class="card-info">
-                <p>Mantente al tanto de nuestra comunidad en Instagram: <br>
-                <a href="https://www.instagram.com/ids_lanin" target="_blank" class="btn-purple">Ir a IDS_LANIN</a></p>
-            </div>
-        </section>
-    </main>
+            <p>Martes 19:30 - Doctrina</p>
+            <p>Jueves 19:30 - Alabanza</p>
+            <p>Domingo 10:30/12:00 - Escuela/Culto</p>
+        </div>
+      </div>
+    </section>
 
-    <script src="app.js"></script>
+    <section id="himnario" class="section">
+      <input type="search" id="search-input" placeholder="Buscar..." oninput="filtrar()">
+      <div class="category-tabs">
+        <button class="tab active" onclick="filtrarCategoria('todas', this)">Todas</button>
+        <button class="tab" onclick="filtrarCategoria('himnos', this)">Himnos</button>
+        <button class="tab" onclick="filtrarCategoria('alabanzas', this)">Alabanzas</button>
+      </div>
+      <ul id="lista-canciones" class="song-list"></ul>
+      <p id="empty-msg" style="display:none">No se encontraron resultados.</p>
+    </section>
+
+    </main>
+  <script src="app.js"></script>
 </body>
 </html>
